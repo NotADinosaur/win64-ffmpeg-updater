@@ -14,4 +14,6 @@ Put the `.py` (or `.exe`) file in the folder you want ffmpeg to be, and then run
 └── LICENSE.txt
 ```
 # Credits
-Thanks to various tutorial sites and stackoverflow users for providing code for me to ~~steal~~ use :)
+Thanks to: 
+- Various tutorial sites and stackoverflow users for providing code for me to ~~steal~~ use :)
+- [BtbN](https://github.com/BtbN) for providing precompiled ffmpeg builds.
