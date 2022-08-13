@@ -2,7 +2,7 @@
 #initial ver. 2022-08-11
 #last updated 2022-08-12
 
-import requests, zipfile, time
+import requests, zipfile, time, colorama
 
 #download and save latest precompiled ffmpeg build from BtbN
 def download():
@@ -17,6 +17,7 @@ def extract():
         ffmpeg.extractall()
 
 #program starts here
+colorama.init()
 startTime = time.time()
 download()
 extract()
@@ -25,4 +26,4 @@ if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
     timeLapsed = time.strftime("%Ss", time.gmtime(finishTime - startTime))
 else:
     timeLapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
-print("done! in " + str(timeLapsed))
+print("\033[0;32mdone! \033[0;0m" + "in " + str(timeLapsed))
