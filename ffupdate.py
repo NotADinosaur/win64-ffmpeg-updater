@@ -16,9 +16,13 @@ def extract():
     with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
         ffmpeg.extractall()
 
+#program starts here
 startTime = time.time()
 download()
 extract()
 finishTime =  time.time()
-timeLapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
+if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
+    timeLapsed = time.strftime("%Ss", time.gmtime(finishTime - startTime))
+else:
+    timeLapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
 print("done! in " + str(timeLapsed))
