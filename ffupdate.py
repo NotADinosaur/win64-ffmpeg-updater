@@ -27,3 +27,4 @@ if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
 else:
     timeLapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
 print("\033[0;32mdone! \033[0;0m" + "in " + str(timeLapsed))
+input("press any key to exit")
