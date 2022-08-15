@@ -1,8 +1,8 @@
 #ffmpeg updater by zozo
 #initial ver. 2022-08-11
-#last updated 2022-08-12
+#last updated 2022-08-14
 
-import requests, zipfile, time, colorama
+import requests, zipfile, time, colorama, os
 
 #download and save latest precompiled ffmpeg build from BtbN
 def download():
@@ -14,7 +14,20 @@ def download():
 def extract():
     print("extracting...")
     with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
-        ffmpeg.extractall()
+        for file in ffmpeg.infolist():
+            if file.filename[-1] == "/":
+                continue
+            if "bin" in file.filename:
+                file.filename = os.path.basename(file.filename)
+                ffmpeg.extract(file, "bin")
+            elif "doc" in file.filename:
+                file.filename = os.path.basename(file.filename)
+                ffmpeg.extract(file, "doc")
+            else:
+                file.filename = os.path.basename(file.filename)
+                ffmpeg.extract(file, "testdir")
+    #delete zip after exracting contents
+    os.remove("ffmpeg.zip")
 
 #program starts here
 colorama.init()
