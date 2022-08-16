@@ -1,8 +1,8 @@
 #ffmpeg updater by zozo
 #initial ver. 2022-08-11
-#last updated 2022-08-15
+#last updated 2022-08-16
 
-import requests, zipfile, time, colorama, os
+import requests, zipfile, time, colorama, os, sys
 
 #download and save latest precompiled ffmpeg build from BtbN
 def download():
@@ -16,6 +16,7 @@ def download():
         if os.path.isfile("ffmpeg.zip") == True:
             os.remove("ffmpeg.zip")
         input("press any key to exit")
+        sys.exit()
     else:
         open("ffmpeg.zip", "wb").write(downloadFile.content)
 
