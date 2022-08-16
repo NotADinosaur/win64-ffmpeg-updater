@@ -35,7 +35,7 @@ def extract():
                 else:
                     file.filename = os.path.basename(file.filename)
                     ffmpeg.extract(file)
-    #delete zip after exracting contents
+    #delete zip after extracting contents
     os.remove("ffmpeg.zip")
 
 #program starts here
