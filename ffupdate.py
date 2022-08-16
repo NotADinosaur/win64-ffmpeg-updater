@@ -1,6 +1,6 @@
 #ffmpeg updater by zozo
 #initial ver. 2022-08-11
-#last updated 2022-08-14
+#last updated 2022-08-15
 
 import requests, zipfile, time, colorama, os
 
@@ -15,17 +15,16 @@ def extract():
     print("extracting...")
     with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
         for file in ffmpeg.infolist():
-            if file.filename[-1] == "/":
-                continue
-            if "bin" in file.filename:
-                file.filename = os.path.basename(file.filename)
-                ffmpeg.extract(file, "bin")
-            elif "doc" in file.filename:
-                file.filename = os.path.basename(file.filename)
-                ffmpeg.extract(file, "doc")
-            else:
-                file.filename = os.path.basename(file.filename)
-                ffmpeg.extract(file, "testdir")
+            if file.is_dir() == False:
+                if "bin" in file.filename:
+                    file.filename = os.path.basename(file.filename)
+                    ffmpeg.extract(file, "bin")
+                elif "doc" in file.filename:
+                    file.filename = os.path.basename(file.filename)
+                    ffmpeg.extract(file, "doc")
+                else:
+                    file.filename = os.path.basename(file.filename)
+                    ffmpeg.extract(file)
     #delete zip after exracting contents
     os.remove("ffmpeg.zip")
 
