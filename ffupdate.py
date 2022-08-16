@@ -7,8 +7,18 @@ import requests, zipfile, time, colorama, os
 #download and save latest precompiled ffmpeg build from BtbN
 def download():
     print("downloading...")
-    downloadFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip")
-    open("ffmpeg.zip", "wb").write(downloadFile.content)
+    try:
+        downloadFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", timeout = 60)
+    #throw a connection error if something goes wrong
+    except requests.exceptions.RequestException:
+        print("\033[0;31mconnection error: \033[0;0m" + "an error occured while downloading ffmpeg")
+        #delete any partially downloaded files
+        if os.path.isfile("ffmpeg.zip") == True:
+            os.remove("ffmpeg.zip")
+        input("press any key to exit")
+    else:
+        open("ffmpeg.zip", "wb").write(downloadFile.content)
+
 
 #extract downloaded zip file
 def extract():
