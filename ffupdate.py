@@ -30,12 +30,6 @@ def extract():
                 if "bin" in file.filename:
                     file.filename = os.path.basename(file.filename)
                     ffmpeg.extract(file, "bin")
-                elif "doc" in file.filename:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, "doc")
-                else:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file)
     #delete zip after extracting contents
     os.remove("ffmpeg.zip")
 
