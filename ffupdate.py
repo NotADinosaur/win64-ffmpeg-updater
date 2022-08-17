@@ -18,7 +18,8 @@ def download():
         input("press any key to exit")
         sys.exit()
     else:
-        open("ffmpeg.zip", "wb").write(downloadFile.content)
+        with open("ffmpeg.zip", "wb") as save:
+            save.write(downloadFile.content)
 
 
 #extract downloaded zip file
@@ -29,13 +30,32 @@ def extract():
             if file.is_dir() == False:
                 if "bin" in file.filename:
                     file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, "bin")
+                    ffmpeg.extract(file, extbin)
+                elif "doc" in file.filename:
+                    file.filename = os.path.basename(file.filename)
+                    ffmpeg.extract(file, extdoc)
+                else:
+                    file.filename = os.path.basename(file.filename)
+                    ffmpeg.extract(file, extdir)
     #delete zip after extracting contents
     os.remove("ffmpeg.zip")
+
+#if config file exists, allow a few small changes
+def config():
+    global extbin
+    global extdoc
+    global extdir
+    if os.path.isfile("config.txt") == True:
+        
+    else:
+        extdir = os.getcwd()
+        extbin = extdir + "/bin"
+        extdoc = extdir + "/doc"
 
 #program starts here
 colorama.init()
 startTime = time.time()
+config()
 download()
 extract()
 finishTime =  time.time()
