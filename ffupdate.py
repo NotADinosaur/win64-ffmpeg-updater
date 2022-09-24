@@ -1,6 +1,6 @@
 #ffmpeg updater by zozo
 #initial ver. 2022-08-11
-#last updated 2022-08-16
+#last updated 2022-09-23
 
 import requests, zipfile, time, colorama, os, sys
 
@@ -30,27 +30,36 @@ def extract():
             if file.is_dir() == False:
                 if "bin" in file.filename:
                     file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extbin)
+                    ffmpeg.extract(file, extBin)
                 elif "doc" in file.filename:
                     file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extdoc)
+                    ffmpeg.extract(file, extDoc)
                 else:
                     file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extdir)
+                    ffmpeg.extract(file, extDir)
     #delete zip after extracting contents
     os.remove("ffmpeg.zip")
 
 #if config file exists, allow a few small changes
 def config():
-    global extbin
-    global extdoc
-    global extdir
+    global extBin
+    global extDoc
+    global extDir
+    global getDocs
     if os.path.isfile("config.txt") == True:
-        
+        with open("config.txt", "r") as config:
+            for line in config:
+                if line.startswith("extDir") == True:
+                    extDir = line.replace("extDir = ", "").strip()
+                    extBin = extDir + "\\bin"
+                    extDoc = extDir + "\\doc"
+                elif line.startswith("getDocs") == True:
+                    getDocs = line.replace("getDocs = ", "").strip()
     else:
-        extdir = os.getcwd()
-        extbin = extdir + "/bin"
-        extdoc = extdir + "/doc"
+        extDir = os.getcwd()
+        extBin = extDir + "\\bin"
+        extDoc = extDir + "\\doc"
+        getDocs = True
 
 #program starts here
 colorama.init()
