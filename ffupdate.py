@@ -28,15 +28,20 @@ def extract():
     with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
         for file in ffmpeg.infolist():
             if file.is_dir() == False:
-                if "bin" in file.filename:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extBin)
-                elif "doc" in file.filename:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extDoc)
-                else:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extDir)
+                if getDocs == True:
+                    if "bin" in file.filename:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, extBin)
+                    elif "doc" in file.filename:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, extDoc)
+                    else:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, extDir)
+                elif getDocs == False:
+                    if "bin" in file.filename:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, extBin)
     #delete zip after extracting contents
     os.remove("ffmpeg.zip")
 
@@ -55,6 +60,10 @@ def config():
                     extDoc = extDir + "\\doc"
                 elif line.startswith("getDocs") == True:
                     getDocs = line.replace("getDocs = ", "").strip()
+                    if getDocs == "True":
+                        getDocs = True
+                    elif getDocs == "False":
+                        getDocs = False
     else:
         extDir = os.getcwd()
         extBin = extDir + "\\bin"
@@ -68,6 +77,7 @@ config()
 download()
 extract()
 finishTime =  time.time()
+#convert time into human-readable format
 if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
     timeLapsed = time.strftime("%Ss", time.gmtime(finishTime - startTime))
 else:
