@@ -13,9 +13,10 @@ Put the `.py` (or `.exe`) (hopefully coming soon :tm:) file in the folder you wa
 │   └── <doc files> 
 └── LICENSE.txt
 ```
-#Config
-This script has two optional settings you can configure by creating a `config.txt` file in the same directory as the script.
-You can set the location ffmpeg is saved to by having a line containing `extDir = C:\path\to\location`, and you can set whether or not the doc files by having a line containing `getDocs = True` or `getDocs = False`.
+# Config
+This script has two optional settings you can configure by creating a `config.txt` file in the same directory as the script.  
+You can set the location ffmpeg is saved to by having a line containing `extDir = C:\path\to\location`, 
+and you can set whether or not the doc files by having a line containing `getDocs = True` or `getDocs = False`.  
 All other lines will be ignored, so you can write any comments you feel are necessary. An example config is included in the repo for reference.
 # Credits
 Thanks to: 
