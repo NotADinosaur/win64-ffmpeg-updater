@@ -4,7 +4,7 @@
 
 import requests, zipfile, time, colorama, os, sys, argparse
 
-colorama.init()
+colorama.just_fix_windows_console()
 startTime = time.time()
 #set up cli arguments
 parser = argparse.ArgumentParser()
@@ -17,7 +17,7 @@ try:
     downloadFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", timeout = 60)
 #throw a connection error if something goes wrong
 except requests.exceptions.RequestException:
-    print("\033[0;31mconnection error: \033[0;0m" + "an error occured while downloading ffmpeg")
+    print("\033[0;31m" + "connection error: " + "\033[0;0m" + "an error occured while downloading ffmpeg")
     #delete any partially downloaded files
     if os.path.isfile("ffmpeg.zip") == True:
         os.remove("ffmpeg.zip")
@@ -37,7 +37,7 @@ try:
                         file.filename = os.path.basename(file.filename)
                         ffmpeg.extract(file, args.dir)
                 elif args.keep_docs == True:
-                    extDoc = args.dir + "\doc"
+                    extDoc = args.dir + "\\doc"
                     if "bin" in file.filename:
                         file.filename = os.path.basename(file.filename)
                         ffmpeg.extract(file, args.dir)
@@ -45,7 +45,7 @@ try:
                         file.filename = os.path.basename(file.filename)
                         ffmpeg.extract(file, extDoc)
 except:
-    print("\033[0;31mfile error: \033[0;0m" + "an error occured while extracting files.")
+    print("\033[0;31m" + "file error: " + "\033[0;0m" + "an error occured while extracting files.")
     input("press enter key to exit")
     sys.exit()
 #delete zip after extracting contents
@@ -56,5 +56,5 @@ if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
     timeElapsed = time.strftime("%Ss", time.gmtime(finishTime - startTime))
 else:
     timeElapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
-print("\033[0;32mdone! \033[0;0m" + "in " + str(timeElapsed))
+print("\033[0;32m" + "done! " + "\033[0;0m" + "in " + str(timeElapsed))
 input("press enter key to exit")
