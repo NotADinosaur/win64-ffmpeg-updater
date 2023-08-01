@@ -22,7 +22,7 @@ try:
         unit = "iB",
         unit_scale = True,
         unit_divisor = 1024,
-        ascii = True,
+        ascii = " #",
         colour = "green",
         bar_format = "{desc}: [{elapsed}] {percentage:3.0f}% <{bar:24}> {n_fmt}/{total_fmt} [{rate_fmt}]",
     ) as bar:
