@@ -2,7 +2,7 @@
 #initial ver. 2022-08-11
 #last updated 2023-08-01
 
-import requests, zipfile, time, colorama, os, sys, argparse
+import requests, zipfile, time, colorama, os, sys, argparse, tqdm
 
 colorama.just_fix_windows_console()
 startTime = time.time()
@@ -12,10 +12,24 @@ parser.add_argument("-d", "--dir", default = os.getcwd(), help = "directory to e
 parser.add_argument("-k", "--keep_docs", action = "store_true", help = "whether to keep the docs files ffmpeg comes with. default: false")
 args = parser.parse_args()
 #download and save latest precompiled ffmpeg build from BtbN
-print("downloading...")
 try:
-    downloadFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", timeout = 60)
-#throw a connection error if something goes wrong
+    #progress bar using tqdm
+    dlFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", stream=True, timeout = 60)
+    total = int(dlFile.headers.get("content-length", 0))
+    with open("ffmpeg.zip", "wb") as save, tqdm.tqdm(
+        desc = "downloading",
+        total = total,
+        unit = "iB",
+        unit_scale = True,
+        unit_divisor = 1024,
+        ascii = True,
+        colour = "green",
+        bar_format = "{desc}: [{elapsed}] {percentage:3.0f}% <{bar:24}> {n_fmt}/{total_fmt} [{rate_fmt}]",
+    ) as bar:
+        for data in dlFile.iter_content(chunk_size=1024):
+            size = save.write(data)
+            bar.update(size)
+#throw an error if something goes wrong
 except requests.exceptions.RequestException:
     print("\033[0;31m" + "connection error: " + "\033[0;0m" + "an error occured while downloading ffmpeg")
     #delete any partially downloaded files
@@ -23,9 +37,6 @@ except requests.exceptions.RequestException:
         os.remove("ffmpeg.zip")
     input("press enter key to exit")
     sys.exit()
-else:
-    with open("ffmpeg.zip", "wb") as save:
-        save.write(downloadFile.content)
 #extract downloaded zip file
 print("extracting...")
 try:
