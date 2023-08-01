@@ -28,21 +28,26 @@ else:
         save.write(downloadFile.content)
 #extract downloaded zip file
 print("extracting...")
-with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
-    for file in ffmpeg.infolist():
-        if file.is_dir() == False:
-            if args.keep_docs == False:
-                if "bin" in file.filename:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, args.dir)
-            elif args.keep_docs == True:
-                extDoc = args.dir + "\doc"
-                if "bin" in file.filename:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, args.dir)
-                else:
-                    file.filename = os.path.basename(file.filename)
-                    ffmpeg.extract(file, extDoc)
+try:
+    with zipfile.ZipFile("ffmpeg.zip", "r") as ffmpeg:
+        for file in ffmpeg.infolist():
+            if file.is_dir() == False:
+                if args.keep_docs == False:
+                    if "bin" in file.filename:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, args.dir)
+                elif args.keep_docs == True:
+                    extDoc = args.dir + "\doc"
+                    if "bin" in file.filename:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, args.dir)
+                    else:
+                        file.filename = os.path.basename(file.filename)
+                        ffmpeg.extract(file, extDoc)
+except:
+    print("\033[0;31mfile error: \033[0;0m" + "an error occured while extracting files.")
+    input("press enter key to exit")
+    sys.exit()
 #delete zip after extracting contents
 os.remove("ffmpeg.zip")
 finishTime =  time.time()
