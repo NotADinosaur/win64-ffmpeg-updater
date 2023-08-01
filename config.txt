@@ -1,4 +1,0 @@
-#Directory to extract to
-extDir = C:\ffmpeg
-#Whether to keep doc files or not
-getDocs = False
