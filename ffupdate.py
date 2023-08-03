@@ -21,7 +21,7 @@ args = parser.parse_args()
 #download and save latest precompiled ffmpeg build from BtbN
 try:
     #progress bar using tqdm
-    dlFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", stream=True, timeout = 60)
+    dlFile = requests.get("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip", stream = True, timeout = 60)
     total = int(dlFile.headers.get("content-length", 0))
     with open("ffmpeg.zip", "wb") as save, tqdm.tqdm(
         desc = "downloading",
@@ -62,8 +62,11 @@ try:
                     else:
                         file.filename = os.path.basename(file.filename)
                         ffmpeg.extract(file, extDoc)
+#throw an error if something goes wrong
 except:
-    print("\033[0;31m" + "file error: " + "\033[0;0m" + "an error occured while extracting files.")
+    print("\033[0;31m" + "file error: " + "\033[0;0m" + "an error occured while extracting files")
+    if os.path.isfile("ffmpeg.zip") == True:
+        os.remove("ffmpeg.zip")
     input("press enter key to exit")
     sys.exit()
 #delete zip after extracting contents
@@ -74,8 +77,8 @@ try:
     output = output[0].split(" ")
     newVersion = output[2]
 except:
-    newVersion = "\033[0;31m" + "[unable to get version]" + "\033[0;0m"
-if initialVersion == newVersion:
+    newVersion = "\033[0;31m" + "[unable to detect version]" + "\033[0;0m"
+if initialVersion == newVersion and initialVersion != "\033[0;31m" + "[unable to detect version]" + "\033[0;0m":
     updateMSG = "found newest version of ffmpeg already installed"
 else:
     updateMSG = "updated ffmpeg from version " + initialVersion + " to " + newVersion
