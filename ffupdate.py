@@ -1,11 +1,18 @@
 #ffmpeg updater by zozo
 #initial ver. 2022-08-11
-#last updated 2023-08-01
+#last updated 2023-08-02
 
 import requests, zipfile, time, colorama, os, sys, argparse, tqdm
 
 colorama.just_fix_windows_console()
 startTime = time.time()
+#get version of currently installed ffmpeg (if any)
+try:
+    output = os.popen("ffmpeg -version").readlines()
+    output = output[0].split(" ")
+    initialVersion = output[2]
+except:
+    initialVersion = "\033[0;31m" + "[unable to detect version]" + "\033[0;0m"
 #set up cli arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--dir", default = os.getcwd(), help = "directory to extract ffmpeg to. default: current working directory")
@@ -24,7 +31,7 @@ try:
         unit_divisor = 1024,
         ascii = " #",
         colour = "green",
-        bar_format = "{desc}: [{elapsed}] {percentage:3.0f}% <{bar:24}> {n_fmt}/{total_fmt} [{rate_fmt}]",
+        bar_format = "[{elapsed}] {desc}: {percentage:3.0f}% <{bar:24}> {n_fmt}/{total_fmt} [{rate_fmt}]",
     ) as bar:
         for data in dlFile.iter_content(chunk_size=1024):
             size = save.write(data)
@@ -61,11 +68,22 @@ except:
     sys.exit()
 #delete zip after extracting contents
 os.remove("ffmpeg.zip")
-finishTime =  time.time()
+#get new version of ffmpeg and compare to initial version
+try:
+    output = os.popen("ffmpeg -version").readlines()
+    output = output[0].split(" ")
+    newVersion = output[2]
+except:
+    newVersion = "\033[0;31m" + "[unable to get version]" + "\033[0;0m"
+if initialVersion == newVersion:
+    updateMSG = "found newest version of ffmpeg already installed"
+else:
+    updateMSG = "updated ffmpeg from version " + initialVersion + " to " + newVersion
 #convert time into human-readable format
+finishTime =  time.time()
 if float(time.strftime("%M", time.gmtime(finishTime - startTime))) < 1:
     timeElapsed = time.strftime("%Ss", time.gmtime(finishTime - startTime))
 else:
     timeElapsed = time.strftime("%Mm %Ss", time.gmtime(finishTime - startTime))
-print("\033[0;32m" + "done! " + "\033[0;0m" + "in " + str(timeElapsed))
+print("\033[0;32m" + "done! " + "\033[0;0m" + updateMSG + " in " + str(timeElapsed))
 input("press enter key to exit")
